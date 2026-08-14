@@ -3,32 +3,33 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import {
   Table,
-  Avatar,
   Input,
   Button,
-  DatePicker,
   Space,
   Row,
   Col,
   Empty,
   Typography,
+  Tag,
 } from "antd";
-import { getPendingVehicleList } from "@/services/adminVehicleService";
+import { getRouteList } from "@/services/routeService";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import AppLayout from "@/components/AppLayout";
 import { routes } from "@/routes";
-import { EyeOutlined, EditOutlined } from "@ant-design/icons";
+import { EyeOutlined } from "@ant-design/icons";
 
 const { Text } = Typography;
+
 const DEFAULT_FILTERS = {
-  name: "",
+  source: "",
+  destination: "",
 };
 
-export default function PendingVehicleList() {
+export default function RouteList() {
   const router = useRouter();
-
-  const [vehicles, setVehicles] = useState([]);
+  
+  const [routeData, setRouteData] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const [page, setPage] = useState(1);
@@ -37,21 +38,21 @@ export default function PendingVehicleList() {
 
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
 
-  const fetchPendingVehicles = useCallback(
+  const fetchRoutes = useCallback(
     async (pageNum = page, size = pageSize, f = filters) => {
       setLoading(true);
       try {
-        const response = await getPendingVehicleList({
+        const response = await getRouteList({
           ...f,
           page: pageNum - 1,
           size,
         });
 
-        setVehicles(response?.data ?? []);
+        setRouteData(response?.data ?? []);
         setTotal(response?.totalElements ?? 0);
       } catch (error) {
-        console.error("Failed to load pending vehicles", error);
-        setVehicles([]);
+        console.error("Failed to load routes", error);
+        setRouteData([]);
         setTotal(0);
       } finally {
         setLoading(false);
@@ -61,8 +62,8 @@ export default function PendingVehicleList() {
   );
 
   useEffect(() => {
-    fetchPendingVehicles();
-  }, [fetchPendingVehicles]);
+    fetchRoutes();
+  }, [fetchRoutes]);
 
   const columns = useMemo(
     () => [
@@ -73,28 +74,28 @@ export default function PendingVehicleList() {
         render: (_text, _record, index) => (page - 1) * pageSize + index + 1,
       },
       {
-        title: "Name",
-        dataIndex: "name",
+        title: "Source",
+        dataIndex: "source",
       },
-
       {
-        title: "Registration Number",
-        dataIndex: "registrationNumber",
+        title: "Destination",
+        dataIndex: "destination",
       },
-
       {
-        title: "Type",
-        dataIndex: "type",
+        title: "Service Fee",
+        dataIndex: "serviceFee",
+        align: "right",
+        render: (value) => (value != null ? value : "-"),
       },
-
-      {
-        title: "Capacity",
-        dataIndex: "capacity",
-      },
-
       {
         title: "Status",
-        dataIndex: "status",
+        dataIndex: "active",
+        align: "center",
+        render: (value) => (
+          <Tag color={value ? "success" : "error"}>
+            {value ? "Active" : "Inactive"}
+          </Tag>
+        ),
       },
       {
         title: "Created At",
@@ -118,7 +119,7 @@ export default function PendingVehicleList() {
             <Button
               type="link"
               icon={<EyeOutlined />}
-              onClick={() => router.push(routes.pendingVehicles.view(record.id))}
+              onClick={() => router.push(routes.routes.view(record.id))}
             >
               View
             </Button>
@@ -131,28 +132,28 @@ export default function PendingVehicleList() {
 
   const applyFilters = () => {
     setPage(1);
-    fetchPendingVehicles(1, pageSize, filters);
+    fetchRoutes(1, pageSize, filters);
   };
 
   const resetFilters = () => {
     setFilters(DEFAULT_FILTERS);
     setPage(1);
-    fetchPendingVehicles(1, pageSize, DEFAULT_FILTERS);
+    fetchRoutes(1, pageSize, DEFAULT_FILTERS);
   };
 
   return (
-    <AppLayout breadcrumb={[{ title: "Pending Vehicles" }, { title: "List" }]}>
+    <AppLayout breadcrumb={[{ title: "Routes" }, { title: "List" }]}>
       <Row justify="space-between" align="middle" style={{ marginBottom: 16 }}>
         <Col>
-          <h2 style={{ margin: 0 }}>Pending Vehicle List</h2>
+          <h2 style={{ margin: 0 }}>Route List</h2>
           <Text type="secondary">
-            Manage all pending vehicles and their details
+            Manage all routes and their details
           </Text>
         </Col>
         <Col>
           <Button
             type="primary"
-            onClick={() => router.push(routes.ownerVehicles.create)}
+            onClick={() => router.push(routes.routes.create)}
           >
             Create
           </Button>
@@ -163,9 +164,14 @@ export default function PendingVehicleList() {
       <Row justify="center" style={{ marginBottom: 16 }}>
         <Space wrap>
           <Input
-            placeholder="Name"
-            value={filters.name}
-            onChange={(e) => setFilters({ ...filters, name: e.target.value })}
+            placeholder="Source"
+            value={filters.source}
+            onChange={(e) => setFilters({ ...filters, source: e.target.value })}
+          />
+          <Input
+            placeholder="Destination"
+            value={filters.destination}
+            onChange={(e) => setFilters({ ...filters, destination: e.target.value })}
           />
           <Button type="primary" onClick={applyFilters}>
             Apply
@@ -178,10 +184,10 @@ export default function PendingVehicleList() {
       <Table
         size="small"
         rowKey="id"
-        dataSource={vehicles}
+        dataSource={routeData}
         columns={columns}
         loading={loading}
-        locale={{ emptyText: <Empty description="No pending vehicles found" /> }}
+        locale={{ emptyText: <Empty description="No routes found" /> }}
         pagination={{
           current: page,
           pageSize,

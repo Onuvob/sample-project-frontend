@@ -28,7 +28,7 @@ const DEFAULT_FILTERS = {
 export default function PilotList() {
   const router = useRouter();
 
-  const [orgs, setPilots] = useState([]);
+  const [pilots, setPilots] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const [page, setPage] = useState(1);
@@ -169,7 +169,7 @@ export default function PilotList() {
       <Table
         size="small"
         rowKey="id"
-        dataSource={orgs}
+        dataSource={pilots}
         columns={columns}
         loading={loading}
         locale={{ emptyText: <Empty description="No pilots found" /> }}

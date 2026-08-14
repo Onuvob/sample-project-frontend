@@ -33,7 +33,7 @@ const ADMIN_MENU = [
     key: "routes",
     icon: <EnvironmentOutlined />,
     label: "Routes",
-    path: "/admin/routes",
+    path: "/routes",
   },
   {
     key: "pilots",
@@ -67,12 +67,6 @@ const OWNER_MENU = [
     icon: <CarOutlined />,
     label: "My Vehicles",
     path: "/owner/vehicles",
-  },
-  {
-    key: "routes",
-    icon: <EnvironmentOutlined />,
-    label: "Routes",
-    path: "/owner/routes",
   },
   {
     key: "coupons",

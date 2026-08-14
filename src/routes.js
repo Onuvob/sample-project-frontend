@@ -23,4 +23,11 @@ export const routes = {
     view: (id) => `/admin/pilots/${id}`,
     edit: (id) => `/admin/pilots/${id}/edit`,
   },
+  
+  routes: {
+    list: "/routes",
+    create: "/routes/create",
+    view: (id) => `/routes/${id}`,
+    edit: (id) => `/routes/${id}/edit`,
+  },
 };

@@ -28,7 +28,7 @@ const DEFAULT_FILTERS = {
 export default function OwnerVehicleList() {
   const router = useRouter();
 
-  const [orgs, setVehicles] = useState([]);
+  const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const [page, setPage] = useState(1);
@@ -186,7 +186,7 @@ export default function OwnerVehicleList() {
       <Table
         size="small"
         rowKey="id"
-        dataSource={orgs}
+        dataSource={vehicles}
         columns={columns}
         loading={loading}
         locale={{ emptyText: <Empty description="No owner vehicles found" /> }}
