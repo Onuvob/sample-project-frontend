@@ -19,12 +19,13 @@ import {
   Tag,
 } from "antd";
 import {
-  UserOutlined,
   ArrowLeftOutlined,
   NumberOutlined,
   ClockCircleOutlined,
   CheckCircleOutlined,
-  PhoneOutlined,
+  EnvironmentOutlined,
+  DollarOutlined,
+  FlagOutlined,
 } from "@ant-design/icons";
 
 import AppLayout from "@/components/AppLayout";
@@ -95,21 +96,16 @@ export default function RouteView() {
     );
   }
 
-  // Helper to determine tag color based on status
-  const getStatusColor = (status) => {
-    if (!status) return "default";
-    const lowerStatus = status.toLowerCase();
-    if (lowerStatus === "active") return "success";
-    if (lowerStatus === "inactive" || lowerStatus === "rejected")
-      return "error";
-    return "default";
-  };
-
   return (
     <AppLayout
       breadcrumb={[
         { title: "Routes", href: routes.routes.list },
-        { title: route.name || "Route Details" },
+        {
+          title:
+            route.source && route.destination
+              ? `${route.source} - ${route.destination}`
+              : "Route Details",
+        },
       ]}
     >
       <Card
@@ -141,21 +137,25 @@ export default function RouteView() {
           </Space>,
         ]}
       >
-        {/* Header with Avatar + Name */}
+        {/* Header with Avatar + Route Path */}
         <Row align="middle" gutter={16} style={{ marginBottom: 16 }}>
           <Col>
             <Avatar
               size={80}
-              icon={<UserOutlined />}
+              icon={<EnvironmentOutlined />}
               style={{ backgroundColor: "#fa8c16", fontSize: 36 }}
             />
           </Col>
           <Col>
             <Title level={2} style={{ margin: 0 }}>
-              {route.name || "Unnamed Route"}
+              {route.source && route.destination
+                ? `${route.source} to ${route.destination}`
+                : "Unnamed Route"}
             </Title>
             <Text type="secondary">
-              {route.phone ? `Phone: ${route.phone}` : "Route"}
+              {route.serviceFee != null
+                ? `Service Fee: ${route.serviceFee}`
+                : "Route Details"}
             </Text>
           </Col>
         </Row>
@@ -182,21 +182,31 @@ export default function RouteView() {
             <Descriptions.Item
               label={
                 <>
-                  <UserOutlined /> Name
+                  <EnvironmentOutlined /> Source
                 </>
               }
             >
-              {route.name ?? "-"}
+              {route.source ?? "-"}
             </Descriptions.Item>
 
             <Descriptions.Item
               label={
                 <>
-                  <PhoneOutlined /> Phone
+                  <FlagOutlined /> Destination
                 </>
               }
             >
-              {route.phone ?? "-"}
+              {route.destination ?? "-"}
+            </Descriptions.Item>
+
+            <Descriptions.Item
+              label={
+                <>
+                  <DollarOutlined /> Service Fee
+                </>
+              }
+            >
+              {route.serviceFee != null ? route.serviceFee : "-"}
             </Descriptions.Item>
 
             <Descriptions.Item
@@ -206,8 +216,10 @@ export default function RouteView() {
                 </>
               }
             >
-              {route.status ? (
-                <Tag color={getStatusColor(route.status)}>{route.status}</Tag>
+              {route.active !== undefined && route.active !== null ? (
+                <Tag color={route.active ? "success" : "error"}>
+                  {route.active ? "Active" : "Inactive"}
+                </Tag>
               ) : (
                 "-"
               )}
