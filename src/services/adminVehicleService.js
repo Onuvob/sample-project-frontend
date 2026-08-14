@@ -1,6 +1,6 @@
 import { apiService } from "@/services/apiService";
 
-const OWNER_VEHICLE_BASE_API = "/adminVehicles";
+const ADMIN_VEHICLE_BASE_API = "/adminVehicles";
 
 export const getPendingVehicleList = async (filter = {}) => {
   // Always keep page & size
@@ -12,18 +12,18 @@ export const getPendingVehicleList = async (filter = {}) => {
   // Add only non-empty fields
   if (filter.name) params.name = filter.name;
 
-  const response = await apiService.get(`${OWNER_VEHICLE_BASE_API}/pending`, {
+  const response = await apiService.get(`${ADMIN_VEHICLE_BASE_API}/pending`, {
     params, // filters
   });
   return response.data.data;
 };
 
 export const approveOwnerVehicle = async (id) => {
-  const response = await apiService.put(`${OWNER_VEHICLE_BASE_API}/approve/${id}`);
+  const response = await apiService.put(`${ADMIN_VEHICLE_BASE_API}/approve/${id}`);
   return response.data.data;
 };
 
 export const rejectOwnerVehicle = async (id) => {
-  const response = await apiService.put(`${OWNER_VEHICLE_BASE_API}/reject/${id}`);
+  const response = await apiService.put(`${ADMIN_VEHICLE_BASE_API}/reject/${id}`);
   return response.data.data;
 };

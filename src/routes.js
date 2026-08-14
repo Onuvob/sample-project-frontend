@@ -7,12 +7,6 @@ export const routes = {
   forgotPassword: "/forgot-password",
   dashboard: "/dashboard",
   profile: "/profile",
-  organizations: {
-    list: "/organizations",
-    create: "/organizations/create",
-    view: (id) => `/organizations/${id}`,
-    edit: (id) => `/organizations/${id}/edit`,
-  },
   ownerVehicles: {
     list: "/owner/vehicles",
     create: "/owner/vehicles/create",
@@ -22,5 +16,11 @@ export const routes = {
   pendingVehicles: {
     list: "/admin/vehicles",
     view: (id) => `/admin/vehicles/${id}`,
+  },
+  pilots: {
+    list: "/admin/pilots",
+    create: "/admin/pilots/create",
+    view: (id) => `/admin/pilots/${id}`,
+    edit: (id) => `/admin/pilots/${id}/edit`,
   },
 };
