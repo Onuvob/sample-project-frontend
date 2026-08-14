@@ -179,6 +179,17 @@ npm run start
 
 ---
 
+
+# Owner Credentials
+
+| Email | Password |
+|--------|----------|
+| owner1@sample.com | password123 |
+|--------|----------|-------------|
+| owner2@sample.com | password123 |
+
+---
+
 # Backend Requirements
 
 This frontend requires the Spring Boot backend to be running.
