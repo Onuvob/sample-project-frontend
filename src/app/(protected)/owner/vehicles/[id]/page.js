@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import dayjs from "dayjs";
 import {
   Card,
   Avatar,
@@ -15,6 +16,7 @@ import {
   Row,
   Col,
   Space,
+  Tag,
 } from "antd";
 import {
   UserOutlined,
@@ -24,6 +26,8 @@ import {
   TagOutlined,
   DashboardOutlined,
   NumberOutlined,
+  ClockCircleOutlined,
+  CheckCircleOutlined,
 } from "@ant-design/icons";
 
 import AppLayout from "@/components/AppLayout";
@@ -188,6 +192,28 @@ export default function OwnerVehicleView() {
 
             <Descriptions.Item label={<><UserOutlined /> Owner</>}>
               {ownerFullName}
+            </Descriptions.Item>
+
+            <Descriptions.Item label={<><CheckCircleOutlined /> Status</>}>
+              {ownerVehicle.status ? (
+                <Tag color={ownerVehicle.status.toLowerCase() === 'active' ? 'success' : 'default'}>
+                  {ownerVehicle.status}
+                </Tag>
+              ) : (
+                "-"
+              )}
+            </Descriptions.Item>
+
+            <Descriptions.Item label={<><ClockCircleOutlined /> Created At</>}>
+              {ownerVehicle.createdAt
+                ? dayjs(ownerVehicle.createdAt).format("YYYY-MM-DD hh:mm A")
+                : "-"}
+            </Descriptions.Item>
+
+            <Descriptions.Item label={<><ClockCircleOutlined /> Updated At</>}>
+              {ownerVehicle.updatedAt
+                ? dayjs(ownerVehicle.updatedAt).format("YYYY-MM-DD hh:mm A")
+                : "-"}
             </Descriptions.Item>
           </Descriptions>
         </Card>

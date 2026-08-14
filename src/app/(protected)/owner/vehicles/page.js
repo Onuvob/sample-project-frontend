@@ -11,17 +11,14 @@ import {
   Row,
   Col,
   Empty,
-  Typography
+  Typography,
 } from "antd";
 import { getOwnerVehicleList } from "@/services/ownerVehicleService";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import AppLayout from "@/components/AppLayout";
 import { routes } from "@/routes";
-import {
-  EyeOutlined,
-  EditOutlined,
-} from "@ant-design/icons";
+import { EyeOutlined, EditOutlined } from "@ant-design/icons";
 
 const { Text } = Typography;
 const DEFAULT_FILTERS = {
@@ -60,7 +57,7 @@ export default function OwnerVehicleList() {
         setLoading(false);
       }
     },
-    [page, pageSize, filters]
+    [page, pageSize, filters],
   );
 
   useEffect(() => {
@@ -73,27 +70,31 @@ export default function OwnerVehicleList() {
         title: "SL",
         align: "center",
         width: 60,
-        render: (_text, _record, index) =>
-          (page - 1) * pageSize + index + 1,
+        render: (_text, _record, index) => (page - 1) * pageSize + index + 1,
       },
       {
         title: "Name",
         dataIndex: "name",
       },
-      
+
       {
         title: "Registration Number",
         dataIndex: "registrationNumber",
       },
-      
+
       {
         title: "Type",
         dataIndex: "type",
       },
-      
+
       {
         title: "Capacity",
         dataIndex: "capacity",
+      },
+
+      {
+        title: "Status",
+        dataIndex: "status",
       },
       {
         title: "Created At",
@@ -117,9 +118,7 @@ export default function OwnerVehicleList() {
             <Button
               type="link"
               icon={<EyeOutlined />}
-              onClick={() =>
-                router.push(routes.ownerVehicles.view(record.id))
-              }
+              onClick={() => router.push(routes.ownerVehicles.view(record.id))}
             >
               View
             </Button>
@@ -127,9 +126,7 @@ export default function OwnerVehicleList() {
               type="link"
               style={{ color: "#fa8c16" }}
               icon={<EditOutlined />}
-              onClick={() =>
-                router.push(routes.ownerVehicles.edit(record.id))
-              }
+              onClick={() => router.push(routes.ownerVehicles.edit(record.id))}
             >
               Edit
             </Button>
@@ -137,7 +134,7 @@ export default function OwnerVehicleList() {
         ),
       },
     ],
-    [page, pageSize, router]
+    [page, pageSize, router],
   );
 
   const applyFilters = () => {
@@ -156,7 +153,9 @@ export default function OwnerVehicleList() {
       <Row justify="space-between" align="middle" style={{ marginBottom: 16 }}>
         <Col>
           <h2 style={{ margin: 0 }}>Owner Vehicle List</h2>
-          <Text type="secondary">Manage all owner vehicles and their details</Text>
+          <Text type="secondary">
+            Manage all owner vehicles and their details
+          </Text>
         </Col>
         <Col>
           <Button
@@ -174,9 +173,7 @@ export default function OwnerVehicleList() {
           <Input
             placeholder="Name"
             value={filters.name}
-            onChange={(e) =>
-              setFilters({ ...filters, name: e.target.value })
-            }
+            onChange={(e) => setFilters({ ...filters, name: e.target.value })}
           />
           <Button type="primary" onClick={applyFilters}>
             Apply
