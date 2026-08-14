@@ -21,7 +21,7 @@ const ADMIN_MENU = [
     key: "dashboard",
     icon: <DashboardOutlined />,
     label: "Dashboard",
-    path: "/admin/dashboard",
+    path: "/dashboard",
   },
   {
     key: "vehicles",
@@ -60,7 +60,7 @@ const OWNER_MENU = [
     key: "dashboard",
     icon: <DashboardOutlined />,
     label: "Dashboard",
-    path: "/owner/dashboard",
+    path: "/dashboard",
   },
   {
     key: "vehicles",
