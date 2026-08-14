@@ -185,7 +185,7 @@ npm run start
 | Email | Password |
 |--------|----------|
 | owner1@sample.com | password123 |
-| owner1@sample.com | password123 |
+| owner2@sample.com | password123 |
 
 ---
 
