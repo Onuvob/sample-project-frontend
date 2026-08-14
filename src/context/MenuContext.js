@@ -86,12 +86,6 @@ const OWNER_MENU = [
     label: "My Bookings",
     path: "/owner/bookings",
   },
-  {
-    key: "profile",
-    icon: <UserOutlined />,
-    label: "Profile",
-    path: "/owner/profile",
-  },
 ];
 
 export function MenuProvider({ children }) {

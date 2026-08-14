@@ -152,7 +152,7 @@ export default function AppLayout({ children, breadcrumb }) {
             <Button type="text">
               <Space>
                 <UserOutlined />
-                {user?.username || "User"}
+                {user?.lastName || "User"}
               </Space>
             </Button>
           </Dropdown>

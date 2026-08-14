@@ -37,10 +37,10 @@ export default function Dashboard() {
       {/* HEADER */}
       <div style={{ marginBottom: "30px" }}>
         <Title level={3} style={{ marginBottom: "6px" }}>
-          Welcome back, {user?.firstname} 👋
+          Welcome back, {user?.firstName} 👋
         </Title>
         <Text type="secondary">
-          Here’s what’s happening with your Bikervai account today.
+          Here’s what’s happening with your account today.
         </Text>
       </div>
 
@@ -92,10 +92,10 @@ export default function Dashboard() {
               <Avatar size={64} icon={<UserOutlined />} />
               <div>
                 <Text strong style={{ fontSize: "16px" }}>
-                  {user?.firstname} {user?.lastname}
+                  {user?.firstName} {user?.lastName}
                 </Text>
                 <br />
-                <Text type="secondary">{user?.username}</Text>
+                <Text type="secondary">{user?.email}</Text>
               </div>
             </Space>
 

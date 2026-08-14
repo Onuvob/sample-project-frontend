@@ -20,20 +20,20 @@ export default function ProfilePage() {
         <Col xs={24} sm={24} md={16} lg={12}>
           <Card
             title={<Title level={4}>My Profile</Title>}
-            bordered={false}
+            variant="borderless"
             style={{ borderRadius: 12 }}
           >
             <Row gutter={[16, 16]}>
               <Col span={12}>
                 <Text strong>First Name:</Text>
                 <div>
-                  <Text>{user?.firstname}</Text>
+                  <Text>{user?.firstName}</Text>
                 </div>
               </Col>
               <Col span={12}>
                 <Text strong>Last Name:</Text>
                 <div>
-                  <Text>{user?.lastname}</Text>
+                  <Text>{user?.lastName}</Text>
                 </div>
               </Col>
             </Row>
@@ -42,9 +42,9 @@ export default function ProfilePage() {
 
             <Row gutter={[16, 16]}>
               <Col span={12}>
-                <Text strong>Username:</Text>
+                <Text strong>Email:</Text>
                 <div>
-                  <Text>{user?.username}</Text>
+                  <Text>{user?.email}</Text>
                 </div>
               </Col>
               <Col span={12}>
