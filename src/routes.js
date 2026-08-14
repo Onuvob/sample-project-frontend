@@ -19,4 +19,8 @@ export const routes = {
     view: (id) => `/owner/vehicles/${id}`,
     edit: (id) => `/owner/vehicles/${id}/edit`,
   },
+  pendingVehicles: {
+    list: "/admin/vehicles",
+    view: (id) => `/admin/vehicles/${id}`,
+  },
 };
