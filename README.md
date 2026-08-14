@@ -1,36 +1,210 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pilot Booking & Coupon Payment Management System (Frontend)
 
-## Getting Started
+A modern web application built with **Next.js**, **React**, and **Ant Design** for managing pilot service bookings, coupon-based payments, vehicle approvals, routes, and pilot assignments.
 
-First, run the development server:
+The system provides two user roles:
+
+- **Admin**
+- **Owner**
+
+Owners can register, manage their vehicles, create bookings, and pay using coupons. Administrators manage the overall workflow, including routes, pilots, coupons, booking approvals, and pilot assignments.
+
+---
+
+## Technologies Used
+
+- Next.js 15.5.2
+- React 19.1.0
+- Ant Design 6.1.1
+- Axios
+- JWT Authentication
+- React Leaflet
+- Leaflet Maps
+
+---
+
+## Dependencies
+
+```json
+{
+  "antd": "^6.1.1",
+  "axios": "^1.11.0",
+  "jwt-decode": "^4.0.0",
+  "leaflet": "^1.9.4",
+  "next": "15.5.2",
+  "react": "19.1.0",
+  "react-dom": "19.1.0",
+  "react-leaflet": "^5.0.0"
+}
+```
+
+---
+
+# Features
+
+## Authentication
+
+- User Registration
+- Login
+- JWT Authentication
+- Role Based Authorization
+- Protected Routes
+
+---
+
+## Owner Features
+
+- Register Account
+- Login
+- Dashboard
+- Vehicle Management
+- View Routes
+- View Coupons
+- Create Booking
+- Booking History
+- Profile Management
+
+---
+
+## Admin Features
+
+- Dashboard
+- Vehicle Approval / Rejection
+- Route Management
+- Pilot Management
+- Coupon Management
+- Booking Approval
+- Pilot Assignment
+
+---
+
+## Booking Workflow
+
+```text
+Owner Registration
+        │
+        ▼
+Owner Login
+        │
+        ▼
+Add Vehicle
+        │
+        ▼
+Admin Approves Vehicle
+        │
+        ▼
+Select Route
+        │
+        ▼
+Apply Coupon
+        │
+        ▼
+Booking Created
+        │
+        ▼
+Admin Approves Booking
+        │
+        ▼
+Assign Pilot
+        │
+        ▼
+Booking Completed
+```
+
+---
+
+# Clone the Repository
+
+```bash
+git clone <repository-url>
+```
+
+Example
+
+```bash
+git clone https://github.com/onuvob/sample-project-frontend.git
+```
+
+Go to the project directory
+
+```bash
+cd sample-project-frontend
+```
+
+---
+
+# Install Dependencies
+
+```bash
+npm install
+```
+
+---
+
+# Run Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+# Build for Production
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Start Production Server
 
-## Deploy on Vercel
+```bash
+npm run start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Admin Credentials
+
+| Email | Password |
+|--------|----------|
+| admin@sample.com | password123 |
+
+---
+
+# Backend Requirements
+
+This frontend requires the Spring Boot backend to be running.
+
+Example Backend URL
+
+```
+http://localhost:8080
+```
+
+Update your API base URL if necessary.
+
+---
+
+# Developer
+
+**Sonjoy Tripura**
+
+Email:
+
+```
+engr.sonjoy.tripura@gmail.com
+```
+
+---
+
+# License
+
+This project is developed for assessment and educational purposes.
