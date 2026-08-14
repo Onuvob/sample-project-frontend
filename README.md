@@ -122,7 +122,7 @@ git clone <repository-url>
 Example
 
 ```bash
-git clone https://github.com/onuvob/sample-project-frontend.git
+git clone https://github.com/Onuvob/sample-project-frontend.git
 ```
 
 Go to the project directory
