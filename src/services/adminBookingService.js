@@ -34,7 +34,7 @@ export const rejectBooking = async (id) => {
   return response.data.data;
 };
 
-export const assignPilot = async (id, payload) => {
-  const response = await apiService.put(`${BOOKING_BASE_API}/assignPilot/${id}`, payload);
+export const assignPilot = async (payload) => {
+  const response = await apiService.put(`${BOOKING_BASE_API}/assignPilot`, payload);
   return response.data.data;
 };

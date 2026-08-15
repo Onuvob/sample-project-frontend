@@ -16,6 +16,9 @@ import {
   Col,
   Space,
   Tag,
+  Modal,
+  Select,
+  Popconfirm,
 } from "antd";
 import {
   UserOutlined,
@@ -29,8 +32,8 @@ import {
   DollarOutlined,
   TagOutlined,
   ScheduleOutlined,
-  DashboardOutlined,
   IdcardOutlined,
+  CloseCircleOutlined,
 } from "@ant-design/icons";
 
 import AppLayout from "@/components/AppLayout";
@@ -48,6 +51,14 @@ export default function BookingView() {
 
   const [booking, setBooking] = useState(null);
   const [loading, setLoading] = useState(true);
+  
+  const [pilots, setPilots] = useState([]);
+  const [loadingPilots, setLoadingPilots] = useState(false);
+  
+  const [assignModalVisible, setAssignModalVisible] = useState(false);
+  const [selectedPilotId, setSelectedPilotId] = useState(null);
+  const [assigning, setAssigning] = useState(false);
+  const [rejecting, setRejecting] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -64,12 +75,76 @@ export default function BookingView() {
       }
     };
 
+    const fetchPilots = async () => {
+      setLoadingPilots(true);
+      try {
+        // Fetching a large page size to populate the dropdown
+        const response = await getPilotList({ page: 0, size: 1000 });
+        setPilots(response?.data || response || []);
+      } catch (error) {
+        console.error("Failed to load pilots", error);
+      } finally {
+        setLoadingPilots(false);
+      }
+    };
+
     fetchBooking();
+    fetchPilots();
 
     return () => {
       mounted = false;
     };
   }, [id]);
+
+  const handleReject = async () => {
+    setRejecting(true);
+    try {
+      await rejectBooking(id);
+      message.success("Booking rejected successfully");
+      setBooking((prev) => (prev ? { ...prev, bookingStatus: "REJECTED" } : null));
+    } catch (error) {
+      console.error("Reject failed", error);
+      message.error("Failed to reject booking");
+    } finally {
+      setRejecting(false);
+    }
+  };
+
+  const handleAssignAndApprove = async () => {
+    if (!selectedPilotId) {
+      message.warning("Please select a pilot");
+      return;
+    }
+    setAssigning(true);
+    try {
+      // 1. Approve the booking first
+      await approveBooking(id);
+      
+      // 2. Then assign the pilot
+      await assignPilot({ pilotId: selectedPilotId, bookingId: id });
+      
+      message.success("Booking approved and pilot assigned successfully");
+      
+      const assignedPilot = pilots.find((p) => p.id === selectedPilotId);
+      setBooking((prev) =>
+        prev
+          ? {
+              ...prev,
+              bookingStatus: "CONFIRMED", // Update to your backend's approved status string if different
+              pilotName: assignedPilot?.name || prev.pilotName,
+              pilotPhone: assignedPilot?.phone || prev.pilotPhone,
+            }
+          : null
+      );
+      setAssignModalVisible(false);
+      setSelectedPilotId(null);
+    } catch (error) {
+      console.error("Approve/Assign failed", error);
+      message.error("Failed to approve booking or assign pilot. Please try again.");
+    } finally {
+      setAssigning(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -92,8 +167,7 @@ export default function BookingView() {
     if (!status) return "default";
     const val = status.toString().toUpperCase();
     if (val === "PAID" || val === "COMPLETED") return "success";
-    if (val === "PENDING") return "warning";
-    if (val === "FAILED" || val === "REFUNDED") return "error";
+    if (val === "UPPAID" || val === "PENDING") return "warning";
     return "default";
   };
 
@@ -101,7 +175,7 @@ export default function BookingView() {
   const getBookingStatusColor = (status) => {
     if (!status) return "default";
     const val = status.toString().toUpperCase();
-    if (val === "CONFIRMED" || val === "COMPLETED") return "success";
+    if (val === "CONFIRMED" || val === "COMPLETED" || val === "APPROVED") return "success";
     if (val === "PENDING") return "processing";
     if (val === "CANCELLED" || val === "REJECTED") return "error";
     return "default";
@@ -111,6 +185,9 @@ export default function BookingView() {
   const ownerFullName = [booking.ownerFirstName, booking.ownerLastName]
     .filter(Boolean)
     .join(" ") || "Unknown Owner";
+
+  // Only show actions if the booking is still pending
+  const isPending = booking.bookingStatus?.toString().toUpperCase() === "PENDING";
 
   return (
     <AppLayout
@@ -123,6 +200,33 @@ export default function BookingView() {
         style={{ maxWidth: 900, margin: "24px auto" }}
         actions={[
           <Space key="actions">
+            {isPending && (
+              <>
+                <Button 
+                  type="primary" 
+                  icon={<CheckCircleOutlined />} 
+                  onClick={() => setAssignModalVisible(true)}
+                >
+                  Approve & Assign Pilot
+                </Button>
+                <Popconfirm
+                  title="Reject this booking?"
+                  description="This action cannot be undone."
+                  onConfirm={handleReject}
+                  okText="Yes, Reject"
+                  cancelText="Cancel"
+                  okButtonProps={{ danger: true, loading: rejecting }}
+                >
+                  <Button 
+                    danger 
+                    icon={<CloseCircleOutlined />} 
+                    loading={rejecting}
+                  >
+                    Reject
+                  </Button>
+                </Popconfirm>
+              </>
+            )}
             <Button onClick={() => router.back()} icon={<ArrowLeftOutlined />}>
               Back
             </Button>
@@ -187,7 +291,7 @@ export default function BookingView() {
 
             <Descriptions.Item label={<><IdcardOutlined /> Pilot</>}>
               <div>
-                <div>{booking.pilotName || "-"}</div>
+                <div>{booking.pilotName || "Not Assigned Yet"}</div>
                 {booking.pilotPhone && (
                   <Text type="secondary" style={{ fontSize: 12 }}>
                     <PhoneOutlined /> {booking.pilotPhone}
@@ -249,6 +353,39 @@ export default function BookingView() {
           </Descriptions>
         </Card>
       </Card>
+
+      {/* Assign Pilot Modal */}
+      <Modal
+        title="Approve Booking & Assign Pilot"
+        open={assignModalVisible}
+        onOk={handleAssignAndApprove}
+        onCancel={() => {
+          setAssignModalVisible(false);
+          setSelectedPilotId(null);
+        }}
+        confirmLoading={assigning}
+        okText="Assign & Approve"
+        cancelText="Cancel"
+      >
+        <div style={{ marginBottom: 16 }}>
+          <Text>Select an available pilot to assign to this booking:</Text>
+        </div>
+        <Select
+          placeholder="Select a pilot"
+          style={{ width: "100%" }}
+          loading={loadingPilots}
+          showSearch
+          optionFilterProp="label"
+          value={selectedPilotId}
+          onChange={(value) => setSelectedPilotId(value)}
+          options={pilots
+            .filter((p) => p.status?.toString().toUpperCase() === "AVAILABLE") // Only show available pilots
+            .map((p) => ({
+              label: `${p.name} (${p.phone || "No phone"})`,
+              value: p.id,
+            }))}
+        />
+      </Modal>
     </AppLayout>
   );
 }
