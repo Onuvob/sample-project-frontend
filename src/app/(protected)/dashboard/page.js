@@ -49,7 +49,7 @@ export default function Dashboard() {
         <Col xs={24} sm={12} md={6}>
           <Card variant="borderless" style={styles.statCard}>
             <Statistic
-              title="Total Reservations"
+              title="Total Bookings"
               value={128}
               prefix={<CalendarOutlined />}
             />
@@ -59,7 +59,7 @@ export default function Dashboard() {
         <Col xs={24} sm={12} md={6}>
           <Card variant="borderless" style={styles.statCard}>
             <Statistic
-              title="Active Branches"
+              title="Active Coupons"
               value={5}
               prefix={<ShopOutlined />}
             />
@@ -115,22 +115,22 @@ export default function Dashboard() {
             <Row gutter={[16, 16]}>
               <Col xs={24} sm={12}>
                 <Button block size="large" style={styles.actionButton}>
-                  Create Reservation
+                  Bookings
                 </Button>
               </Col>
               <Col xs={24} sm={12}>
                 <Button block size="large" style={styles.actionButton}>
-                  Manage Branches
+                  Vehicles
                 </Button>
               </Col>
               <Col xs={24} sm={12}>
                 <Button block size="large" style={styles.actionButton}>
-                  View Reports
+                  Coupons
                 </Button>
               </Col>
               <Col xs={24} sm={12}>
                 <Button block size="large" style={styles.actionButton}>
-                  Settings
+                  Profile
                 </Button>
               </Col>
             </Row>
