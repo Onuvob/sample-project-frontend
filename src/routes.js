@@ -23,7 +23,7 @@ export const routes = {
     view: (id) => `/admin/pilots/${id}`,
     edit: (id) => `/admin/pilots/${id}/edit`,
   },
-  
+
   routes: {
     list: "/routes",
     create: "/routes/create",
@@ -31,7 +31,6 @@ export const routes = {
     edit: (id) => `/routes/${id}/edit`,
   },
 
-  
   adminCoupons: {
     list: "/admin/coupons",
     create: "/admin/coupons/create",
@@ -41,5 +40,14 @@ export const routes = {
   ownerCoupons: {
     list: "/owner/coupons",
     view: (id) => `/owner/coupons/${id}`,
+  },
+  bookings: {
+    list: "/owner/bookings",
+    create: "/owner/bookings/create",
+    view: (id) => `/owner/bookings/${id}`,
+  },
+  adminBookings: {
+    list: "/admin/bookings",
+    view: (id) => `/admin/bookings/${id}`,
   },
 };
