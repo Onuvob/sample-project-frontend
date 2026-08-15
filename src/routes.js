@@ -38,4 +38,8 @@ export const routes = {
     view: (id) => `/admin/coupons/${id}`,
     edit: (id) => `/admin/coupons/${id}/edit`,
   },
+  ownerCoupons: {
+    list: "/owner/coupons",
+    view: (id) => `/owner/coupons/${id}`,
+  },
 };
