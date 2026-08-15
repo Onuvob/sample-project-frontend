@@ -35,7 +35,8 @@ import {
 
 import AppLayout from "@/components/AppLayout";
 import { routes } from "@/routes";
-import { getBooking } from "@/services/adminBookingService";
+import { getBooking, approveBooking, rejectBooking, assignPilot } from "@/services/adminBookingService";
+import { getPilotList } from "@/services/adminPilotService";
 
 import PageLoader from "@/components/common/PageLoader";
 
