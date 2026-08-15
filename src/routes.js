@@ -30,4 +30,12 @@ export const routes = {
     view: (id) => `/routes/${id}`,
     edit: (id) => `/routes/${id}/edit`,
   },
+
+  
+  adminCoupons: {
+    list: "/admin/coupons",
+    create: "/admin/coupons/create",
+    view: (id) => `/admin/coupons/${id}`,
+    edit: (id) => `/admin/coupons/${id}/edit`,
+  },
 };

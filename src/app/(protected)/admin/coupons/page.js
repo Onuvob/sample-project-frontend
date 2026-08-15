@@ -3,24 +3,24 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import {
   Table,
-  Avatar,
   Input,
   Button,
-  DatePicker,
   Space,
   Row,
   Col,
   Empty,
   Typography,
+  Tag,
 } from "antd";
 import { getCouponList } from "@/services/adminCouponService";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import AppLayout from "@/components/AppLayout";
 import { routes } from "@/routes";
-import { EyeOutlined, EditOutlined } from "@ant-design/icons";
+import { EyeOutlined } from "@ant-design/icons";
 
 const { Text } = Typography;
+
 const DEFAULT_FILTERS = {
   code: "",
 };
@@ -62,7 +62,7 @@ export default function CouponList() {
 
   useEffect(() => {
     fetchCoupons();
-  }, [fetchPilots]);
+  }, [fetchCoupons]); // Fixed bug: was incorrectly referencing fetchPilots
 
   const columns = useMemo(
     () => [
@@ -73,19 +73,33 @@ export default function CouponList() {
         render: (_text, _record, index) => (page - 1) * pageSize + index + 1,
       },
       {
-        title: "Name",
-        dataIndex: "name",
+        title: "Code",
+        dataIndex: "code",
       },
-
-      
       {
-        title: "Phone",
-        dataIndex: "phone",
+        title: "Amount",
+        dataIndex: "amount",
+        align: "right",
+        render: (value) => (value != null ? value : "-"),
       },
-
+      {
+        title: "Expiry Date",
+        dataIndex: "expiryDate",
+        align: "center",
+        render: (value) => (value ? dayjs(value).format("YYYY-MM-DD") : "-"),
+      },
+      {
+        title: "Owner",
+        render: (_text, record) =>
+          [record.ownerFirstName, record.ownerLastName]
+            .filter(Boolean)
+            .join(" ") || "-",
+      },
       {
         title: "Status",
         dataIndex: "status",
+        align: "center",
+        render: (value) => (value ? <Tag>{value}</Tag> : "-"),
       },
       {
         title: "Created At",
@@ -109,7 +123,7 @@ export default function CouponList() {
             <Button
               type="link"
               icon={<EyeOutlined />}
-              onClick={() => router.push(routes.pilots.view(record.id))}
+              onClick={() => router.push(routes.adminCoupons.view(record.id))}
             >
               View
             </Button>
@@ -122,28 +136,26 @@ export default function CouponList() {
 
   const applyFilters = () => {
     setPage(1);
-    fetchPilots(1, pageSize, filters);
+    fetchCoupons(1, pageSize, filters);
   };
 
   const resetFilters = () => {
     setFilters(DEFAULT_FILTERS);
     setPage(1);
-    fetchPilots(1, pageSize, DEFAULT_FILTERS);
+    fetchCoupons(1, pageSize, DEFAULT_FILTERS);
   };
 
   return (
-    <AppLayout breadcrumb={[{ title: "Pilots" }, { title: "List" }]}>
+    <AppLayout breadcrumb={[{ title: "Coupons" }, { title: "List" }]}>
       <Row justify="space-between" align="middle" style={{ marginBottom: 16 }}>
         <Col>
-          <h2 style={{ margin: 0 }}>Pilot List</h2>
-          <Text type="secondary">
-            Manage all pilots and their details
-          </Text>
+          <h2 style={{ margin: 0 }}>Coupon List</h2>
+          <Text type="secondary">Manage all coupons and their details</Text>
         </Col>
         <Col>
           <Button
             type="primary"
-            onClick={() => router.push(routes.pilots.create)}
+            onClick={() => router.push(routes.adminCoupons.create)}
           >
             Create
           </Button>
@@ -154,9 +166,9 @@ export default function CouponList() {
       <Row justify="center" style={{ marginBottom: 16 }}>
         <Space wrap>
           <Input
-            placeholder="Name"
-            value={filters.name}
-            onChange={(e) => setFilters({ ...filters, name: e.target.value })}
+            placeholder="Code"
+            value={filters.code}
+            onChange={(e) => setFilters({ ...filters, code: e.target.value })}
           />
           <Button type="primary" onClick={applyFilters}>
             Apply
@@ -169,10 +181,10 @@ export default function CouponList() {
       <Table
         size="small"
         rowKey="id"
-        dataSource={pilots}
+        dataSource={coupons}
         columns={columns}
         loading={loading}
-        locale={{ emptyText: <Empty description="No pilots found" /> }}
+        locale={{ emptyText: <Empty description="No coupons found" /> }}
         pagination={{
           current: page,
           pageSize,
