@@ -13,7 +13,7 @@ import {
   Empty,
   Typography,
 } from "antd";
-import { getPendingVehicleList } from "@/services/adminVehicleService";
+import { getCouponList } from "@/services/adminCouponService";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import AppLayout from "@/components/AppLayout";
@@ -22,13 +22,13 @@ import { EyeOutlined, EditOutlined } from "@ant-design/icons";
 
 const { Text } = Typography;
 const DEFAULT_FILTERS = {
-  name: "",
+  code: "",
 };
 
-export default function PendingVehicleList() {
+export default function CouponList() {
   const router = useRouter();
 
-  const [vehicles, setVehicles] = useState([]);
+  const [coupons, setCoupons] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const [page, setPage] = useState(1);
@@ -37,21 +37,21 @@ export default function PendingVehicleList() {
 
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
 
-  const fetchPendingVehicles = useCallback(
+  const fetchCoupons = useCallback(
     async (pageNum = page, size = pageSize, f = filters) => {
       setLoading(true);
       try {
-        const response = await getPendingVehicleList({
+        const response = await getCouponList({
           ...f,
           page: pageNum - 1,
           size,
         });
 
-        setVehicles(response?.data ?? []);
+        setCoupons(response?.data ?? []);
         setTotal(response?.totalElements ?? 0);
       } catch (error) {
-        console.error("Failed to load pending vehicles", error);
-        setVehicles([]);
+        console.error("Failed to load coupons", error);
+        setCoupons([]);
         setTotal(0);
       } finally {
         setLoading(false);
@@ -61,8 +61,8 @@ export default function PendingVehicleList() {
   );
 
   useEffect(() => {
-    fetchPendingVehicles();
-  }, [fetchPendingVehicles]);
+    fetchCoupons();
+  }, [fetchPilots]);
 
   const columns = useMemo(
     () => [
@@ -77,19 +77,10 @@ export default function PendingVehicleList() {
         dataIndex: "name",
       },
 
+      
       {
-        title: "Registration Number",
-        dataIndex: "registrationNumber",
-      },
-
-      {
-        title: "Type",
-        dataIndex: "type",
-      },
-
-      {
-        title: "Capacity",
-        dataIndex: "capacity",
+        title: "Phone",
+        dataIndex: "phone",
       },
 
       {
@@ -118,7 +109,7 @@ export default function PendingVehicleList() {
             <Button
               type="link"
               icon={<EyeOutlined />}
-              onClick={() => router.push(routes.pendingVehicles.view(record.id))}
+              onClick={() => router.push(routes.pilots.view(record.id))}
             >
               View
             </Button>
@@ -131,23 +122,31 @@ export default function PendingVehicleList() {
 
   const applyFilters = () => {
     setPage(1);
-    fetchPendingVehicles(1, pageSize, filters);
+    fetchPilots(1, pageSize, filters);
   };
 
   const resetFilters = () => {
     setFilters(DEFAULT_FILTERS);
     setPage(1);
-    fetchPendingVehicles(1, pageSize, DEFAULT_FILTERS);
+    fetchPilots(1, pageSize, DEFAULT_FILTERS);
   };
 
   return (
-    <AppLayout breadcrumb={[{ title: "Pending Vehicles" }, { title: "List" }]}>
+    <AppLayout breadcrumb={[{ title: "Pilots" }, { title: "List" }]}>
       <Row justify="space-between" align="middle" style={{ marginBottom: 16 }}>
         <Col>
-          <h2 style={{ margin: 0 }}>Pending Vehicle List</h2>
+          <h2 style={{ margin: 0 }}>Pilot List</h2>
           <Text type="secondary">
-            Manage all pending vehicles and their details
+            Manage all pilots and their details
           </Text>
+        </Col>
+        <Col>
+          <Button
+            type="primary"
+            onClick={() => router.push(routes.pilots.create)}
+          >
+            Create
+          </Button>
         </Col>
       </Row>
 
@@ -170,10 +169,10 @@ export default function PendingVehicleList() {
       <Table
         size="small"
         rowKey="id"
-        dataSource={vehicles}
+        dataSource={pilots}
         columns={columns}
         loading={loading}
-        locale={{ emptyText: <Empty description="No pending vehicles found" /> }}
+        locale={{ emptyText: <Empty description="No pilots found" /> }}
         pagination={{
           current: page,
           pageSize,
