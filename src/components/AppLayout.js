@@ -110,7 +110,7 @@ export default function AppLayout({ children, breadcrumb }) {
             fontWeight: "bold",
           }}
         >
-          {collapsed ? "BV" : "Practice"}
+          {collapsed ? "PB" : "Pilot Booking"}
         </div>
         {loading ? (
           <PageLoader />
@@ -176,7 +176,7 @@ export default function AppLayout({ children, breadcrumb }) {
         </Content>
 
         <Footer style={{ textAlign: "center" }}>
-          Custom App ©{new Date().getFullYear()} Created by Sonjoy Tripura
+          Pilot Booking Application ©{new Date().getFullYear()} Created by Sonjoy Tripura
         </Footer>
       </Layout>
     </Layout>
